@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { FileUploadService } from '../public-api';
 import { EnvironmentConfig } from './environment-config.interface';
 import EnvironmentConfigService from './environment-config.service';
 
@@ -17,6 +18,7 @@ export class NgxFileUploadModule {
     return {
       ngModule: NgxFileUploadModule,
       providers: [
+        FileUploadService,
         {
           provide: EnvironmentConfigService,
           useValue: config,
