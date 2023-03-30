@@ -36,6 +36,8 @@ export class FileUploadService {
       prefix: prefix!,
       mimeType,
       extension,
+      // stop angular service worker from intercepting this request
+       'ngsw-bypass':'',
     };
 
     return this.http.get(this.config.getUploadLinkURL, { params })
