@@ -1,3 +1,11 @@
+## [1.0.3](https://github.com/uzenith360/ngx-file-upload/compare/v1.0.2...v1.0.3) (2023-03-30)
+
+
+### Bug Fixes
+
+* revert bypass ng serviceworkers in get-upload-url ([9ad099f](https://github.com/uzenith360/ngx-file-upload/commit/9ad099f0e24a62e1ead2f8e415850f8e9f9a39b4))
+* revert bypass ng serviceworkers in get-upload-url ([6c14d3d](https://github.com/uzenith360/ngx-file-upload/commit/6c14d3df34a053152ad3a168cf528a20459aee4a))
+
 ## [1.0.2](https://github.com/uzenith360/ngx-file-upload/compare/v1.0.1...v1.0.2) (2023-03-30)
 
 
