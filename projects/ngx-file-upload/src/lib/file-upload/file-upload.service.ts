@@ -38,16 +38,8 @@ export class FileUploadService {
       extension,
     };
 
-    return this.http.get(
-      this.config.getUploadLinkURL,
-      {
-        params,
-        headers: {
-          // skip service worker interceptors
-          'ngsw-bypass': "true",
-        },
-      },
-    ).pipe(
+    return this.http.get(this.config.getUploadLinkURL, { params })
+      .pipe(
         httpRetry(),
         catchError((err: HttpErrorResponse, caught: Observable<{ data: UploadURLResult, statusCode: number, message: any; }>) => {
           return of(
