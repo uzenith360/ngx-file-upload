@@ -20,7 +20,7 @@ export class FileUploadService {
   public uploadFile(file: File, prefix?: string): Observable<HttpResponse<void> | HttpUploadProgressEvent> {
     return this.getUploadURL(
       file.type,
-      file.name.split('.').at(-1)?.toLowerCase()!,
+      file?.name?.split('.')?.slice(-1)?.[0]?.toLowerCase() || 'jpg',
       prefix,
     ).pipe(
       concatMap(
