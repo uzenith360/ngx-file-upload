@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/uzenith360/ngx-file-upload/compare/v1.0.4...v1.0.5) (2023-09-13)
+
+
+### Bug Fixes
+
+* bug - W.name.split(...).at is not a function ([0e8c61f](https://github.com/uzenith360/ngx-file-upload/commit/0e8c61f456b0c374f2e6c99445ff5f71077ce425))
+
 ## [1.0.4](https://github.com/uzenith360/ngx-file-upload/compare/v1.0.3...v1.0.4) (2023-03-30)
 
 
