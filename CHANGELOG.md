@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/uzenith360/ngx-file-upload/compare/v1.0.5...v1.1.0) (2023-10-01)
+
+
+### Features
+
+* upgrade to angular 16 ([fedfd37](https://github.com/uzenith360/ngx-file-upload/commit/fedfd3707a970fb05abddcf984c4eda1df993a30))
+
 ## [1.0.5](https://github.com/uzenith360/ngx-file-upload/compare/v1.0.4...v1.0.5) (2023-09-13)
 
 
