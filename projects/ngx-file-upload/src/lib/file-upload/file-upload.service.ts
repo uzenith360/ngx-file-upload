@@ -18,6 +18,15 @@ export class FileUploadService {
   ) { }
 
   public uploadFile(file: File, prefix?: string): Observable<HttpResponse<void> | HttpUploadProgressEvent> {
+    // [
+    //   'jpg', 'jpeg', 'png', 'gif', 
+    //   'webp', 'apng', 'tif', 'tiff', 
+    //   'pdf', 'svg', 'svgz', 'bmp', 
+    //   'dib', 'xbm', 'ico', 'heif', 
+    //   'heifs', 'heics', 'avci', 'avcs', 
+    //   'avif', 'hiff'
+    // ]
+
     return this.getUploadURL(
       file.type,
       file?.name?.split('.')?.slice(-1)?.[0]?.toLowerCase() || 'jpg',
