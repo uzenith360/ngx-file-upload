@@ -90,8 +90,8 @@ export class FileUploadService {
           // rather than preview it when the download button is clicked
           'Content-Disposition': `attachment; filename=${pathname.substring(pathname.lastIndexOf('/') + 1)}`,
         },
-        reportProgress: true,
         observe: 'events',
+        reportProgress: !this.config.ignoreProgressReports,
       }
     ).pipe(
       httpRetry(),
