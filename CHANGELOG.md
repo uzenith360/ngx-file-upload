@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/uzenith360/ngx-file-upload/compare/v1.1.0...v1.2.0) (2023-11-05)
+
+
+### Features
+
+* ignoreProgressReports config option ([6289780](https://github.com/uzenith360/ngx-file-upload/commit/6289780578c360f053553448a39146ecc3f537dc))
+
 # [1.1.0](https://github.com/uzenith360/ngx-file-upload/compare/v1.0.5...v1.1.0) (2023-10-01)
 
 
