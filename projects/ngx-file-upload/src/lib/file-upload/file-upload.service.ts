@@ -47,6 +47,8 @@ export class FileUploadService {
       extension,
       // stop angular service worker from intercepting this request
       'ngsw-bypass': '',
+      // random param to prevent the mobile browser for caching request
+      s: `${Date.now()}${Math.floor(Math.random() * 1000)}`
     };
 
     return this.http.get(this.config.getUploadLinkURL, { params })
