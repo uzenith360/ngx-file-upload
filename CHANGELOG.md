@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/uzenith360/ngx-file-upload/compare/v1.2.0...v1.2.1) (2023-11-07)
+
+
+### Bug Fixes
+
+* random param to prevent the mobile browser for caching request ([606513b](https://github.com/uzenith360/ngx-file-upload/commit/606513b936057e505550d4d045c4e9b163975d9e))
+
 # [1.2.0](https://github.com/uzenith360/ngx-file-upload/compare/v1.1.0...v1.2.0) (2023-11-05)
 
 
