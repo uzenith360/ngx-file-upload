@@ -76,7 +76,7 @@ export class FileUploadService {
   }
 
   private uploadFileToURL(uploadFileURL: string, file: File): Observable<HttpResponse<void> | HttpUploadProgressEvent> {
-    // const pathname: string = (new URL(uploadFileURL)).pathname;
+    const pathname: string = (new URL(uploadFileURL)).pathname;
 
     return this.http.put(
       uploadFileURL,
@@ -90,7 +90,7 @@ export class FileUploadService {
           'ngsw-bypass': "true",
           // This Content-Disposition is to force the browser to download file 
           // rather than preview it when the download button is clicked
-        'Content-Disposition': `attachment; filename=${file.name/*pathname.substring(pathname.lastIndexOf('/') + 1)*/}`,
+        'Content-Disposition': `attachment; filename=${/*file.name ?? */pathname.substring(pathname.lastIndexOf('/') + 1)}`,
         },
         observe: 'events',
         reportProgress: !this.config.ignoreProgressReports,
