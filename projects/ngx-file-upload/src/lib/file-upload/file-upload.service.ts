@@ -90,7 +90,7 @@ export class FileUploadService {
           'ngsw-bypass': "true",
           // This Content-Disposition is to force the browser to download file 
           // rather than preview it when the download button is clicked
-        'Content-Disposition': `attachment; filename=${/*file.name ?? */pathname.substring(pathname.lastIndexOf('/') + 1)}`,
+        'Content-Disposition': `attachment; filename=${file.name ?? pathname.substring(pathname.lastIndexOf('/') + 1)}`,
         },
         observe: 'events',
         reportProgress: !this.config.ignoreProgressReports,
