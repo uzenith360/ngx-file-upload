@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/uzenith360/ngx-file-upload/compare/v1.2.1...v1.2.2) (2023-12-15)
+
+
+### Bug Fixes
+
+* file name should be originally uploaded file name ([00d3708](https://github.com/uzenith360/ngx-file-upload/commit/00d3708ae0d6fd3d0134319994f16d9a15734eb4))
+
 ## [1.2.1](https://github.com/uzenith360/ngx-file-upload/compare/v1.2.0...v1.2.1) (2023-11-07)
 
 
