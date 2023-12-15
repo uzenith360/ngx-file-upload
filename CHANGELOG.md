@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/uzenith360/ngx-file-upload/compare/v1.2.2...v1.2.3) (2023-12-15)
+
+
+### Bug Fixes
+
+* update ([2ba8351](https://github.com/uzenith360/ngx-file-upload/commit/2ba8351666a8a420fb28a6370cabf86f33ef7683))
+
 ## [1.2.2](https://github.com/uzenith360/ngx-file-upload/compare/v1.2.1...v1.2.2) (2023-12-15)
 
 
