@@ -1,11 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpEventType, HttpResponse, HttpUploadProgressEvent } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse, HttpUploadProgressEvent } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import type { UploadURLResult } from '@uzenith360/aws-s3-generate-upload-url';
 import { HandledHttpResponse, HttpError, httpRetry } from '@uzenith360/http-utils';
-import { Observable, catchError, throwError, concatMap, map, of, switchMap, timeout, tap, takeWhile } from 'rxjs';
+import { Observable, catchError, throwError, concatMap, map, of } from 'rxjs';
 import { EnvironmentConfig } from '../environment-config.interface';
 import EnvironmentConfigService from '../environment-config.service';
-import { FileUploadTimeoutError } from './file-upload-timeout.error';
 
 @Injectable({
   providedIn: 'root',
@@ -79,12 +78,6 @@ export class FileUploadService {
   private uploadFileToURL(uploadFileURL: string, file: File): Observable<HttpResponse<void> | HttpUploadProgressEvent> {
     const pathname: string = (new URL(uploadFileURL)).pathname;
 
-    // Define the progress timeout duration in milliseconds.
-    const progressTimeoutDuration: number = this.config.progressTimeoutDuration ?? 3 * 60 * 1000; // 3 minutes.
-
-    // tracks last time a progress event was received
-    let lastProgressTimestamp: number = Date.now();
-
     return this.http.put(
       uploadFileURL,
       file,
@@ -97,115 +90,26 @@ export class FileUploadService {
           'ngsw-bypass': "true",
           // This Content-Disposition is to force the browser to download file 
           // rather than preview it when the download button is clicked
-          'Content-Disposition': `attachment; filename=${file.name ?? pathname.substring(pathname.lastIndexOf('/') + 1)}`,
+        'Content-Disposition': `attachment; filename=${file.name ?? pathname.substring(pathname.lastIndexOf('/') + 1)}`,
         },
         observe: 'events',
-        reportProgress: /*!this.config.ignoreProgressReports*/true,
+        reportProgress: !this.config.ignoreProgressReports,
       }
     ).pipe(
       httpRetry(),
-
-
-      // Update the last progress timestamp on every progress event
-      tap((event: HttpResponse<void> | HttpUploadProgressEvent) => {
-        if (event.type === HttpEventType.UploadProgress) {
-          lastProgressTimestamp = Date.now();
-        }
-      }),
-
-
-      // Include the timeout condition
-      timeout({
-        each: progressTimeoutDuration,
-        with: () => {
-          const currentTime: number = Date.now();
-
-          if (currentTime - lastProgressTimestamp >= progressTimeoutDuration) { console.error('TIMEOUT OCCURED 1');
-            return throwError(() => new FileUploadTimeoutError());
-          } else {
-            // No timeout needed as a progress event was received within the duration
-            return new Observable<never>();
-          }
-        }
-      }),
-      // Handle the completion of the upload
-      takeWhile(
-        (event: HttpResponse<void> | HttpUploadProgressEvent, index: number) => {
-          // stop the observable chain when we have a response
-          return event.type !== HttpEventType.Response;
-        },
-        true,
-      ), // including the final emission before completing
-
-      // switchMap((event: HttpResponse<void> | HttpUploadProgressEvent) => {
-      //   if (event.type === HttpEventType.UploadProgress) {
-      //     lastProgressTimestamp = Date.now();
-      //   }
-
-      //   return new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => {
-      //     observer.next(event);
-
-      //     return { unsubscribe() { } };
-      //   }).pipe(
-      //     // timeoutWith(
-      //     //   progressTimeoutDuration,
-      //     //   new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => {
-      //     //     const currentTime = Date.now();
-      //     //     if (currentTime - lastProgressTimestamp > progressTimeoutDuration) {
-      //     //       observer.error(new CustomTimeoutError());
-      //     //     } else {
-      //     //       observer.complete(); // Do not timeout since we have received progress events.
-      //     //     }
-      //     //   }
-      //     //   )
-      //     // ),
-      //     // timeout(
-      //     //   {
-      //     //     each: progressTimeoutDuration,
-      //     //     with: (info: TimeoutInfo<HttpResponse<void> | HttpUploadProgressEvent, unknown>) =>
-      //     //       new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => {
-      //     //         const currentTime = Date.now();
-      //     //         if (currentTime - lastProgressTimestamp > progressTimeoutDuration) {
-      //     //           observer.error(new CustomTimeoutError());
-      //     //         } else {
-      //     //           observer.complete(); // Do not timeout since we have received progress events.
-      //     //         }
-      //     //       }
-      //     //       )
-      //     //   }
-      //     // )
-      //     timeout({
-      //       each: progressTimeoutDuration,
-      //       with: (/*info: TimeoutInfo<HttpResponse<void> | HttpUploadProgressEvent, unknown>*/) => {
-      //         const currentTime: number = Date.now();
-
-      //         if (currentTime - lastProgressTimestamp > progressTimeoutDuration) {
-      //           return throwError(() => new FileUploadTimeoutError());
-      //         } else {
-      //           return new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => observer.complete()); // Do not timeout since we have received progress events.
-      //         }
-      //       }
-      //     }),
-      //   );
-      // }),
-
       catchError((err: HttpErrorResponse, caught: Observable<HttpResponse<void> | HttpUploadProgressEvent>) => {
-        if (err instanceof FileUploadTimeoutError) { console.error('TIMEOUT OCCURED 2');
-          return throwError(() => new FileUploadTimeoutError());
-        } else {
-          switch (err.status) {
-            case 500:
-              return throwError(() => new HttpError('Problem uploading file, please try again', err.status));
-            case 0:
-            default:
-              return throwError(
-                () => new HttpError(
-                  (err.error?.message?.join && err.error?.message?.join(', ')) ?? err.error?.message ?? err?.message ?? 'Problem uploading file, please check network and try again',
-                  err.status,
-                ),
-              );
-          };
-        }
+        switch (err.status) {
+          case 500:
+            return throwError(() => new HttpError('Problem uploading file, please try again', err.status));
+          case 0:
+          default:
+            return throwError(
+              () => new HttpError(
+                (err.error?.message?.join && err.error?.message?.join(', ')) ?? err.error?.message ?? err?.message ?? 'Problem uploading file, please check network and try again',
+                err.status,
+              ),
+            );
+        };
       }),
     );
   }
