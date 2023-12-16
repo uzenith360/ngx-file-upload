@@ -1,3 +1,10 @@
+## [1.3.4](https://github.com/uzenith360/ngx-file-upload/compare/v1.3.3...v1.3.4) (2023-12-16)
+
+
+### Bug Fixes
+
+* revert add progress timeout ([da62934](https://github.com/uzenith360/ngx-file-upload/commit/da62934ea7eed4bfa0300177a6171aa114c86748))
+
 ## [1.3.3](https://github.com/uzenith360/ngx-file-upload/compare/v1.3.2...v1.3.3) (2023-12-16)
 
 
