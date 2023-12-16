@@ -120,7 +120,7 @@ export class FileUploadService {
         with: () => {
           const currentTime: number = Date.now();
 
-          if (currentTime - lastProgressTimestamp >= progressTimeoutDuration) {
+          if (currentTime - lastProgressTimestamp >= progressTimeoutDuration) { console.error('TIMEOUT OCCURED');
             return throwError(() => new FileUploadTimeoutError());
           } else {
             // No timeout needed as a progress event was received within the duration
@@ -190,7 +190,7 @@ export class FileUploadService {
       // }),
 
       catchError((err: HttpErrorResponse, caught: Observable<HttpResponse<void> | HttpUploadProgressEvent>) => {
-        if (err instanceof FileUploadTimeoutError) {
+        if (err instanceof FileUploadTimeoutError) { console.error('TIMEOUT OCCURED');
           return throwError(() => err);
         } else {
           switch (err.status) {
