@@ -1,4 +1,5 @@
 export interface EnvironmentConfig {
   getUploadLinkURL: string;
-  ignoreProgressReports?: boolean;
+  progressTimeoutDuration?: number;
+  // ignoreProgressReports?: boolean;
 }
