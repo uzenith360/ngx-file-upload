@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpEventType, HttpResponse, HttpUploadP
 import { Inject, Injectable } from '@angular/core';
 import type { UploadURLResult } from '@uzenith360/aws-s3-generate-upload-url';
 import { HandledHttpResponse, HttpError, httpRetry } from '@uzenith360/http-utils';
-import { Observable, catchError, throwError, concatMap, map, of, TimeoutError, switchMap, timeout } from 'rxjs';
+import { Observable, catchError, throwError, concatMap, map, of, switchMap, timeout, tap, takeWhile } from 'rxjs';
 import { EnvironmentConfig } from '../environment-config.interface';
 import EnvironmentConfigService from '../environment-config.service';
 import { FileUploadTimeoutError } from './file-upload-timeout.error';
@@ -104,61 +104,94 @@ export class FileUploadService {
       }
     ).pipe(
       httpRetry(),
-      switchMap((event: HttpResponse<void> | HttpUploadProgressEvent) => {
+
+
+      // Update the last progress timestamp on every progress event
+      tap((event: HttpResponse<void> | HttpUploadProgressEvent) => {
         if (event.type === HttpEventType.UploadProgress) {
           lastProgressTimestamp = Date.now();
         }
-
-        return new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => {
-          observer.next(event);
-
-          return { unsubscribe() { } };
-        }).pipe(
-          // timeoutWith(
-          //   progressTimeoutDuration,
-          //   new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => {
-          //     const currentTime = Date.now();
-          //     if (currentTime - lastProgressTimestamp > progressTimeoutDuration) {
-          //       observer.error(new CustomTimeoutError());
-          //     } else {
-          //       observer.complete(); // Do not timeout since we have received progress events.
-          //     }
-          //   }
-          //   )
-          // ),
-          // timeout(
-          //   {
-          //     each: progressTimeoutDuration,
-          //     with: (info: TimeoutInfo<HttpResponse<void> | HttpUploadProgressEvent, unknown>) =>
-          //       new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => {
-          //         const currentTime = Date.now();
-          //         if (currentTime - lastProgressTimestamp > progressTimeoutDuration) {
-          //           observer.error(new CustomTimeoutError());
-          //         } else {
-          //           observer.complete(); // Do not timeout since we have received progress events.
-          //         }
-          //       }
-          //       )
-          //   }
-          // )
-          timeout({
-            each: progressTimeoutDuration,
-            with: (/*info: TimeoutInfo<HttpResponse<void> | HttpUploadProgressEvent, unknown>*/) => {
-              const currentTime: number = Date.now();
-
-              if (currentTime - lastProgressTimestamp > progressTimeoutDuration) {
-                return throwError(() => new FileUploadTimeoutError());
-              } else {
-                return new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => observer.complete()); // Do not timeout since we have received progress events.
-              }
-            }
-          }),
-        );
       }),
 
+
+      // Include the timeout condition
+      timeout({
+        each: progressTimeoutDuration,
+        with: () => {
+          const currentTime: number = Date.now();
+
+          if (currentTime - lastProgressTimestamp >= progressTimeoutDuration) {
+            return throwError(() => new FileUploadTimeoutError());
+          } else {
+            // No timeout needed as a progress event was received within the duration
+            return new Observable<never>();
+          }
+        }
+      }),
+      // Handle the completion of the upload
+      takeWhile(
+        (event: HttpResponse<void> | HttpUploadProgressEvent, index: number) => {
+          // stop the observable chain when we have a response
+          return event.type !== HttpEventType.Response;
+        },
+        true,
+      ), // including the final emission before completing
+
+      // switchMap((event: HttpResponse<void> | HttpUploadProgressEvent) => {
+      //   if (event.type === HttpEventType.UploadProgress) {
+      //     lastProgressTimestamp = Date.now();
+      //   }
+
+      //   return new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => {
+      //     observer.next(event);
+
+      //     return { unsubscribe() { } };
+      //   }).pipe(
+      //     // timeoutWith(
+      //     //   progressTimeoutDuration,
+      //     //   new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => {
+      //     //     const currentTime = Date.now();
+      //     //     if (currentTime - lastProgressTimestamp > progressTimeoutDuration) {
+      //     //       observer.error(new CustomTimeoutError());
+      //     //     } else {
+      //     //       observer.complete(); // Do not timeout since we have received progress events.
+      //     //     }
+      //     //   }
+      //     //   )
+      //     // ),
+      //     // timeout(
+      //     //   {
+      //     //     each: progressTimeoutDuration,
+      //     //     with: (info: TimeoutInfo<HttpResponse<void> | HttpUploadProgressEvent, unknown>) =>
+      //     //       new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => {
+      //     //         const currentTime = Date.now();
+      //     //         if (currentTime - lastProgressTimestamp > progressTimeoutDuration) {
+      //     //           observer.error(new CustomTimeoutError());
+      //     //         } else {
+      //     //           observer.complete(); // Do not timeout since we have received progress events.
+      //     //         }
+      //     //       }
+      //     //       )
+      //     //   }
+      //     // )
+      //     timeout({
+      //       each: progressTimeoutDuration,
+      //       with: (/*info: TimeoutInfo<HttpResponse<void> | HttpUploadProgressEvent, unknown>*/) => {
+      //         const currentTime: number = Date.now();
+
+      //         if (currentTime - lastProgressTimestamp > progressTimeoutDuration) {
+      //           return throwError(() => new FileUploadTimeoutError());
+      //         } else {
+      //           return new Observable<HttpResponse<void> | HttpUploadProgressEvent>(observer => observer.complete()); // Do not timeout since we have received progress events.
+      //         }
+      //       }
+      //     }),
+      //   );
+      // }),
+
       catchError((err: HttpErrorResponse, caught: Observable<HttpResponse<void> | HttpUploadProgressEvent>) => {
-        if (err instanceof TimeoutError) {
-          return throwError(() => new FileUploadTimeoutError());
+        if (err instanceof FileUploadTimeoutError) {
+          return throwError(() => err);
         } else {
           switch (err.status) {
             case 500:
