@@ -1,3 +1,10 @@
+## [1.3.6](https://github.com/uzenith360/ngx-file-upload/compare/v1.3.5...v1.3.6) (2023-12-17)
+
+
+### Bug Fixes
+
+* typeerror: url constructor: undefined is not a valid URL ([36a75e1](https://github.com/uzenith360/ngx-file-upload/commit/36a75e19c605c5d0d93dbe447e798d8c9b2be199))
+
 ## [1.3.5](https://github.com/uzenith360/ngx-file-upload/compare/v1.3.4...v1.3.5) (2023-12-17)
 
 
