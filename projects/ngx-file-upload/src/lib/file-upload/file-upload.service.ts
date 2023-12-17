@@ -57,8 +57,8 @@ export class FileUploadService {
         catchError((err: HttpErrorResponse, caught: Observable<{ data: UploadURLResult, statusCode: number, message: any; }>) => {
           return of(
             {
-              statusCode: err.status,
-              message: err.error.message ?? 'Problem completing this request, please try again',
+              statusCode: err?.status,
+              message: err?.error?.message ?? 'Problem completing this request, please try again',
               data: {} as UploadURLResult,
             },
           )
@@ -98,15 +98,15 @@ export class FileUploadService {
     ).pipe(
       httpRetry(),
       catchError((err: HttpErrorResponse, caught: Observable<HttpResponse<void> | HttpUploadProgressEvent>) => {
-        switch (err.status) {
+        switch (err?.status) {
           case 500:
-            return throwError(() => new HttpError('Problem uploading file, please try again', err.status));
+            return throwError(() => new HttpError('Problem uploading file, please try again', err?.status));
           case 0:
           default:
             return throwError(
               () => new HttpError(
-                (err.error?.message?.join && err.error?.message?.join(', ')) ?? err.error?.message ?? err?.message ?? 'Problem uploading file, please check network and try again',
-                err.status,
+                (err?.error?.message?.join && err?.error?.message?.join(', ')) ?? err?.error?.message ?? err?.message ?? 'Problem uploading file, please check network and try again',
+                err?.status,
               ),
             );
         };
