@@ -1,3 +1,10 @@
+## [1.3.5](https://github.com/uzenith360/ngx-file-upload/compare/v1.3.4...v1.3.5) (2023-12-17)
+
+
+### Bug Fixes
+
+* err.err is null ([4a17445](https://github.com/uzenith360/ngx-file-upload/commit/4a17445d18f586c5cbc460a6eccd402de1b578b4))
+
 ## [1.3.4](https://github.com/uzenith360/ngx-file-upload/compare/v1.3.3...v1.3.4) (2023-12-16)
 
 
