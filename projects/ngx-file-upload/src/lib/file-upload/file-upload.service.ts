@@ -1,10 +1,14 @@
 import { HttpClient, HttpErrorResponse, HttpResponse, HttpUploadProgressEvent } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import type { UploadURLResult } from '@uzenith360/aws-s3-generate-upload-url';
 import { HandledHttpResponse, HttpError, httpRetry } from '@uzenith360/http-utils';
 import { Observable, catchError, throwError, concatMap, map, of } from 'rxjs';
 import { EnvironmentConfig } from '../environment-config.interface';
 import EnvironmentConfigService from '../environment-config.service';
+
+interface UploadURLResult {
+  signedURL: string;
+  key: string;
+}
 
 @Injectable({
   providedIn: 'root',
