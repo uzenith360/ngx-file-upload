@@ -1,3 +1,10 @@
+## [1.3.7](https://github.com/uzenith360/ngx-file-upload/compare/v1.3.6...v1.3.7) (2023-12-18)
+
+
+### Bug Fixes
+
+* deps ([a0b70b2](https://github.com/uzenith360/ngx-file-upload/commit/a0b70b2cf600beb66cd10e0a3d08e2ffc6a1ea53))
+
 ## [1.3.6](https://github.com/uzenith360/ngx-file-upload/compare/v1.3.5...v1.3.6) (2023-12-17)
 
 
