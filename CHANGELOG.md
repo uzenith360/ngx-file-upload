@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/uzenith360/ngx-file-upload/compare/v1.3.7...v1.4.0) (2024-01-11)
+
+
+### Features
+
+* upgrade to angular v17 ([4928b6f](https://github.com/uzenith360/ngx-file-upload/commit/4928b6f4c7346f5b09cb0ed77955b1e92ab96fe1))
+
 ## [1.3.7](https://github.com/uzenith360/ngx-file-upload/compare/v1.3.6...v1.3.7) (2023-12-18)
 
 
