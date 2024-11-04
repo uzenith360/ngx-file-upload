@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import EnvironmentConfigService from '../environment-config.service';
 
@@ -10,13 +10,12 @@ describe('FileUploadService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule(
       {
-        imports:[
-          HttpClientModule,
-        ],
-        providers: [
-          { provide: EnvironmentConfigService, useValue: {} }
-        ],
-      },
+    imports: [],
+    providers: [
+        { provide: EnvironmentConfigService, useValue: {} },
+        provideHttpClient(withInterceptorsFromDi())
+    ]
+},
     );
     service = TestBed.inject(FileUploadService);
   });
