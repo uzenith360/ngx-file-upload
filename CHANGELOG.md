@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/uzenith360/ngx-file-upload/compare/v1.5.0...v1.5.1) (2024-12-16)
+
+
+### Bug Fixes
+
+* upgrade to angular 19 ([fa645c8](https://github.com/uzenith360/ngx-file-upload/commit/fa645c83575d1499e8dd948a69d9607ed6e53c22))
+
 # [1.5.0](https://github.com/uzenith360/ngx-file-upload/compare/v1.4.0...v1.5.0) (2024-11-04)
 
 
