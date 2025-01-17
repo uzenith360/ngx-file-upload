@@ -1,3 +1,10 @@
+## [1.5.5](https://github.com/uzenith360/ngx-file-upload/compare/v1.5.4...v1.5.5) (2025-01-17)
+
+
+### Bug Fixes
+
+* add skipInterceptors ([c739453](https://github.com/uzenith360/ngx-file-upload/commit/c7394531fb88c1e120cea199326d0777bf67e2a8))
+
 ## [1.5.4](https://github.com/uzenith360/ngx-file-upload/compare/v1.5.3...v1.5.4) (2025-01-17)
 
 
