@@ -21,7 +21,7 @@ export class FileUploadService {
     private http: HttpClient,
   ) { }
 
-  public uploadFile(file: File, prefix?: string): Observable<HttpResponse<void> | HttpUploadProgressEvent> {
+  public uploadFile(file: File, prefix?: string, skipInterceptors?: boolean): Observable<HttpResponse<void> | HttpUploadProgressEvent> {
     // [
     //   'jpg', 'jpeg', 'png', 'gif', 
     //   'webp', 'apng', 'tif', 'tiff', 
@@ -35,6 +35,7 @@ export class FileUploadService {
       file.type,
       file?.name?.split('.')?.slice(-1)?.[0]?.toLowerCase() || 'jpg',
       prefix,
+      skipInterceptors,
     ).pipe(
       concatMap(
         ({ data: uploadURLResult }) =>
@@ -43,7 +44,7 @@ export class FileUploadService {
     );
   }
 
-  private getUploadURL(mimeType: string, extension: string, prefix?: string,)
+  private getUploadURL(mimeType: string, extension: string, prefix?: string, skipInterceptors?: boolean)
     : Observable<HandledHttpResponse<UploadURLResult>> {
     const params: { [key: string]: string | number } = {
       prefix: prefix!,
@@ -55,28 +56,33 @@ export class FileUploadService {
       s: `${Date.now()}${Math.floor(Math.random() * 1000)}`
     };
 
-    return this.http.get(this.config.getUploadLinkURL, { params })
-      .pipe(
-        httpRetry(),
-        catchError((err: HttpErrorResponse, caught: Observable<{ data: UploadURLResult, statusCode: number, message: any; }>) => {
-          return of(
-            {
-              statusCode: err?.status,
-              message: err?.error?.message ?? 'Problem completing this request, please try again',
-              data: {} as UploadURLResult,
-            },
-          )
-        }),
-        map<{ data: UploadURLResult, statusCode: number, message: any }, HandledHttpResponse<UploadURLResult>>(
-          ({ data: uploadURLResult, statusCode, message }) => (
-            {
-              data: uploadURLResult,
-              message,
-              statusCode: statusCode ?? 200,
-            }
-          ),
+    return this.http.get(
+      this.config.getUploadLinkURL,
+      {
+        params,
+        headers: !!skipInterceptors ? { 'skip-interceptors': "true" } : {},
+      }
+    ).pipe(
+      httpRetry(),
+      catchError((err: HttpErrorResponse, caught: Observable<{ data: UploadURLResult, statusCode: number, message: any; }>) => {
+        return of(
+          {
+            statusCode: err?.status,
+            message: err?.error?.message ?? 'Problem completing this request, please try again',
+            data: {} as UploadURLResult,
+          },
+        )
+      }),
+      map<{ data: UploadURLResult, statusCode: number, message: any }, HandledHttpResponse<UploadURLResult>>(
+        ({ data: uploadURLResult, statusCode, message }) => (
+          {
+            data: uploadURLResult,
+            message,
+            statusCode: statusCode ?? 200,
+          }
         ),
-      );
+      ),
+    );
   }
 
   private uploadFileToURL(uploadFileURL: string, file: File): Observable<HttpResponse<void> | HttpUploadProgressEvent> {
