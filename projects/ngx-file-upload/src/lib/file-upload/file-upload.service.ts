@@ -55,7 +55,7 @@ export class FileUploadService {
       s: `${Date.now()}${Math.floor(Math.random() * 1000)}`
     };
 
-    return this.http.get(this.config.getUploadLinkURL, { params })
+    return this.http.get(this.config.getUploadLinkURL, { params, headers: {'skip-interceptors': "true"} })
       .pipe(
         httpRetry(),
         catchError((err: HttpErrorResponse, caught: Observable<{ data: UploadURLResult, statusCode: number, message: any; }>) => {
