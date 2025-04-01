@@ -1,3 +1,10 @@
+## [1.5.6](https://github.com/uzenith360/ngx-file-upload/compare/v1.5.5...v1.5.6) (2025-04-01)
+
+
+### Bug Fixes
+
+* upgrade angular and run migrations ([474e43a](https://github.com/uzenith360/ngx-file-upload/commit/474e43a737d960072b8d86de6878be50d25237db))
+
 ## [1.5.5](https://github.com/uzenith360/ngx-file-upload/compare/v1.5.4...v1.5.5) (2025-01-17)
 
 
