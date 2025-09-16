@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/uzenith360/ngx-file-upload/compare/v1.5.6...v1.6.0) (2025-09-16)
+
+
+### Bug Fixes
+
+* upgrade to angular 20 ([6ca7ee2](https://github.com/uzenith360/ngx-file-upload/commit/6ca7ee249a35c4549e390ffb21afa602b92b8356))
+
+
+### Features
+
+* upgrade to angular 20 ([19db25a](https://github.com/uzenith360/ngx-file-upload/commit/19db25a98fd3a0a26e864024c480c6a5af25f648))
+
 ## [1.5.6](https://github.com/uzenith360/ngx-file-upload/compare/v1.5.5...v1.5.6) (2025-04-01)
 
 
