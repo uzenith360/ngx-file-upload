@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/uzenith360/ngx-file-upload/compare/v1.6.0...v1.6.1) (2025-10-27)
+
+
+### Bug Fixes
+
+* add batch upload files class ([093d7cc](https://github.com/uzenith360/ngx-file-upload/commit/093d7cc89d8cf7299aa33fec93251a6f81537697))
+
 # [1.6.0](https://github.com/uzenith360/ngx-file-upload/compare/v1.5.6...v1.6.0) (2025-09-16)
 
 
