@@ -5,8 +5,10 @@ import { FileUploadService } from '../public-api';
 import { EnvironmentConfig } from './environment-config.interface';
 import EnvironmentConfigService from './environment-config.service';
 
-@NgModule({ declarations: [],
-    exports: [], imports: [CommonModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+@NgModule({
+  declarations: [],
+  exports: [], imports: [CommonModule], providers: [provideHttpClient(withInterceptorsFromDi())]
+})
 export class NgxFileUploadModule {
   static forRoot(config: EnvironmentConfig): ModuleWithProviders<NgxFileUploadModule> {
     return {
@@ -20,4 +22,4 @@ export class NgxFileUploadModule {
       ],
     }
   }
- }
+}
