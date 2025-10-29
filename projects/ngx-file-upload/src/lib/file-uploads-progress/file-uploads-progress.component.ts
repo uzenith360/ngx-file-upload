@@ -1,9 +1,7 @@
 import { Component, input, output } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'ngx-file-uploads-progress',
-  imports: [MatIcon],
   templateUrl: './file-uploads-progress.component.html',
   styleUrl: './file-uploads-progress.component.css'
 })
