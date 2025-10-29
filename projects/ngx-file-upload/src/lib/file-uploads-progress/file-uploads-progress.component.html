@@ -1,0 +1,31 @@
+<div [hidden]="!totalUploads()"
+  class="fixed bottom-0 right-0 z-10 rounded-tl-lg rounded-tr-lg md:rounded-tr-none w-full md:max-w-sm p-6 bg-blue-700 text-white">
+  <div class="flex justify-between gap-x-6">
+    <h4 class="font-medium">Uploading Files</h4>
+    <h6 class="text-sm">{{currentUploadIndex()}} of {{totalUploads()}}</h6>
+  </div>
+  <div class="flex">
+    <div class="h-4 bg-gray-200 overflow-hidden mt-2 flex-grow">
+      <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-4 relative" [style]="'width:'+(uploadProgress()??0)+'%'">
+        <p class="absolute top-0 left-0 w-full text-center text-xs text-white">{{uploadProgress()}}%</p>
+      </div>
+    </div>
+    @if (isUploadsResumeData()) {
+    <button (click)="resumeUploadFilesEvent.emit()" matRipple class="p-1 !overflow-visible">
+      <mat-icon class="align-middle !h-[20px] !w-[20px] text-[20px]">play_circle_outline</mat-icon>
+    </button>
+    }
+  </div>
+  @for (fileUploadProgress of filesUploadProgress(); track fileUploadProgress.name) {
+  <div class="mt-2">
+    <p class="text-xs text-right text-ellipsis whitespace-nowrap overflow-hidden">{{fileUploadProgress.name}}</p>
+    <div class="h-4 bg-gray-200 overflow-hidden flex-grow">
+      <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-4 relative"
+        [style]="'width:'+(fileUploadProgress.progress)+'%'">
+        <p class="absolute top-0 left-0 w-full text-center text-xs text-white">{{fileUploadProgress.progress}}%
+        </p>
+      </div>
+    </div>
+  </div>
+  }
+</div>
