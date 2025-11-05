@@ -1,3 +1,10 @@
+## [1.6.4](https://github.com/uzenith360/ngx-file-upload/compare/v1.6.3...v1.6.4) (2025-11-05)
+
+
+### Bug Fixes
+
+* add file upload progress UI ([5129817](https://github.com/uzenith360/ngx-file-upload/commit/51298171f92047626b21c836c5d41672b8265535))
+
 ## [1.6.3](https://github.com/uzenith360/ngx-file-upload/compare/v1.6.2...v1.6.3) (2025-10-29)
 
 
